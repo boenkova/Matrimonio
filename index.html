@@ -10,19 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --milk:#fbf8f2;
+      --milk:#fcfaf5;
       --paper:#fffdf9;
       --sage:#a8b8a2;
       --sage-dark:#6b7c65;
       --green:#445646;
       --gold:#b99763;
-      --rose:#e8ddd3;
+      --rose:#eadfd6;
       --text:#334333;
       --muted:#687467;
       --line:rgba(68,86,70,.12);
       --shadow:0 20px 50px rgba(51,67,51,.08);
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
@@ -34,6 +33,34 @@
       color:var(--text);
       font-family:'Inter',system-ui,sans-serif;
       overflow-x:hidden;
+    }
+
+    .lang-switch{
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:50;
+      display:flex;
+      gap:8px;
+      padding:8px;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(12px);
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.9);
+      box-shadow:var(--shadow);
+    }
+    .lang-switch button{
+      border:none;
+      background:transparent;
+      color:var(--green);
+      padding:10px 14px;
+      border-radius:999px;
+      font:600 12px/1 'Inter',sans-serif;
+      letter-spacing:.08em;
+      cursor:pointer;
+    }
+    .lang-switch button.active{
+      background:rgba(68,86,70,.10);
     }
 
     .bg-petals{
@@ -50,7 +77,7 @@
       height:24px;
       background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(236,227,216,.88));
       border-radius:60% 40% 65% 35% / 55% 40% 60% 45%;
-      opacity:.25;
+      opacity:.22;
       filter:drop-shadow(0 4px 8px rgba(0,0,0,.05));
       animation:fall linear infinite;
     }
@@ -67,28 +94,10 @@
       100%{transform:translate3d(var(--drift),110vh,0) rotate(320deg)}
     }
 
-    .music-toggle{
-      position:fixed;
-      top:18px;
-      right:18px;
-      z-index:40;
-      border:none;
-      border-radius:999px;
-      padding:12px 16px;
-      background:rgba(255,255,255,.78);
-      color:var(--green);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
-      font:600 12px/1 'Inter',sans-serif;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      cursor:pointer;
-    }
-
     .overlay{
       position:fixed;
       inset:0;
-      z-index:30;
+      z-index:40;
       background:
         radial-gradient(circle at center, rgba(255,255,255,.25), transparent 55%),
         linear-gradient(180deg, rgba(255,251,245,.98), rgba(247,243,236,.98));
@@ -102,107 +111,113 @@
       pointer-events:none;
     }
 
-    .invite-door{
-      width:min(760px, calc(100% - 32px));
-      height:min(78vh, 720px);
+    .invite-stage{
+      width:min(780px, calc(100% - 32px));
+      height:min(80vh, 720px);
       position:relative;
       perspective:1800px;
     }
-
-    .door-wrap{
+    .envelope{
       position:absolute;
       inset:0;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      border-radius:34px;
-      overflow:hidden;
+      border-radius:36px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(250,246,239,.98));
+      border:1px solid rgba(255,255,255,.9);
       box-shadow:0 24px 70px rgba(54,69,55,.15);
-      border:1px solid rgba(255,255,255,.85);
-      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(250,246,239,.96));
-      transition:transform .9s ease, opacity .8s ease;
-      transform-style:preserve-3d;
+      overflow:hidden;
     }
-
-    .overlay.open .door-left{ transform:rotateY(-128deg); }
-    .overlay.open .door-right{ transform:rotateY(128deg); }
-    .overlay.open .door-wrap{ opacity:0; transform:scale(1.02); }
-
-    .door{
-      position:relative;
-      background:
-        radial-gradient(circle at top left, rgba(185,151,99,.08), transparent 22%),
-        radial-gradient(circle at bottom right, rgba(168,184,162,.12), transparent 26%),
-        linear-gradient(180deg, #fffdfa 0%, #faf6f0 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      transform-style:preserve-3d;
-      transition:transform 1.2s cubic-bezier(.22,.8,.2,1);
-      backface-visibility:hidden;
-    }
-    .door::before{
+    .envelope::before{
       content:"";
       position:absolute;
-      inset:16px;
-      border:1px solid rgba(185,151,99,.22);
-      border-radius:24px;
+      inset:14px;
+      border:1px solid rgba(185,151,99,.20);
+      border-radius:28px;
+    }
+    .flap-top{
+      position:absolute;
+      top:0; left:0; right:0;
+      height:54%;
+      background:linear-gradient(180deg, rgba(248,243,236,.98), rgba(244,237,228,.98));
+      clip-path:polygon(0 0,100% 0,50% 88%);
+      transform-origin:top center;
+      transition:transform 1.2s cubic-bezier(.2,.8,.2,1);
+      z-index:3;
+      border-bottom:1px solid rgba(185,151,99,.10);
+    }
+    .overlay.open .flap-top{
+      transform:rotateX(180deg);
+    }
+
+    .letter{
+      position:absolute;
+      left:5%;
+      right:5%;
+      bottom:4%;
+      height:86%;
+      background:linear-gradient(180deg, #fffdf9, #fbf8f2);
+      border-radius:28px;
+      border:1px solid rgba(185,151,99,.16);
+      box-shadow:0 14px 36px rgba(51,67,51,.08);
+      padding:28px 24px;
+      transform:translateY(26%);
+      transition:transform 1.1s cubic-bezier(.2,.8,.2,1), opacity .8s ease;
+      z-index:2;
+      overflow:hidden;
+    }
+    .overlay.open .letter{
+      transform:translateY(-2%);
+    }
+    .overlay.open .envelope{
+      transform:scale(1.02);
+      opacity:0;
+      transition:transform .9s ease, opacity .8s ease .45s;
+    }
+
+    .letter-floral{
+      position:absolute;
+      width:150px;
+      height:150px;
+      opacity:.92;
       pointer-events:none;
     }
-    .door-left{
-      transform-origin:left center;
-      border-right:1px solid rgba(68,86,70,.08);
-    }
-    .door-right{
-      transform-origin:right center;
-      border-left:1px solid rgba(68,86,70,.08);
-    }
+    .letter-floral.lt{left:-8px; top:-8px}
+    .letter-floral.rb{right:-8px; bottom:-8px; transform:scaleX(-1) scaleY(-1)}
+    .letter-floral svg{width:100%;height:100%}
 
-    .floral-cluster{
-      position:absolute;
-      width:160px;
-      height:160px;
-      opacity:.92;
-    }
-    .door-left .floral-cluster{left:8px; top:8px}
-    .door-right .floral-cluster{right:8px; bottom:8px; transform:scaleX(-1) scaleY(-1)}
-    .floral-cluster svg{width:100%;height:100%}
-
-    .seal{
-      width:118px;
-      height:118px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      background:radial-gradient(circle at 35% 35%, #ffffff 0%, #f4eee6 58%, #e8ddd0 100%);
-      box-shadow:0 18px 30px rgba(185,151,99,.18);
-      border:1px solid rgba(185,151,99,.24);
-      text-align:center;
-      color:var(--green);
-      font:500 20px/1.15 'Cormorant Garamond',serif;
-      letter-spacing:.08em;
-    }
-
-    .overlay-center{
-      position:absolute;
-      inset:auto 0 42px 0;
-      text-align:center;
+    .letter-content{
+      position:relative;
       z-index:2;
-      padding:0 20px;
-      transition:opacity .6s ease;
+      text-align:center;
+      padding-top:18px;
     }
-    .overlay.open .overlay-center{opacity:0}
-    .overlay-title{
+    .letter-date{
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--sage-dark);
+      font-size:12px;
+      margin-bottom:10px;
+    }
+    .letter-script{
       margin:0;
-      color:var(--green);
-      font:500 clamp(36px, 8vw, 66px)/.95 'Cormorant Garamond',serif;
+      font-family:'Great Vibes',cursive;
+      color:var(--gold);
+      font-size:46px;
+      line-height:1;
     }
-    .overlay-sub{
-      margin:10px 0 18px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.7;
+    .letter-names{
+      margin:8px 0 10px;
+      color:var(--green);
+      font:500 clamp(52px,8vw,86px)/.92 'Cormorant Garamond',serif;
+    }
+    .letter-text{
+      max-width:520px;
+      margin:0 auto;
+      color:#5c6a5c;
+      line-height:1.85;
+      font-size:16px;
     }
     .open-btn{
+      margin-top:24px;
       border:none;
       border-radius:999px;
       padding:15px 26px;
@@ -257,7 +272,6 @@
       border-radius:26px;
       pointer-events:none;
     }
-
     .hero-grid{
       display:grid;
       grid-template-columns:1.08fr .92fr;
@@ -294,7 +308,6 @@
       font-size:18px;
       line-height:1.95;
     }
-
     .hero-note{
       margin-top:22px;
       padding:18px 18px;
@@ -305,7 +318,6 @@
       line-height:1.8;
       font-size:15px;
     }
-
     .scroll-link{
       display:inline-flex;
       align-items:center;
@@ -334,25 +346,20 @@
     .count-card::after{
       content:"";
       position:absolute;
-      right:-80px;
-      bottom:-90px;
-      width:220px;
-      height:220px;
-      border-radius:50%;
+      right:-80px; bottom:-90px;
+      width:220px; height:220px; border-radius:50%;
       background:radial-gradient(circle, rgba(168,184,162,.20), transparent 66%);
       filter:blur(8px);
     }
     .count-title{
-      position:relative;
-      z-index:1;
+      position:relative; z-index:1;
       text-align:center;
       margin:2px 0 16px;
       color:var(--green);
       font:500 34px/1 'Cormorant Garamond',serif;
     }
     .count-grid{
-      position:relative;
-      z-index:1;
+      position:relative; z-index:1;
       display:grid;
       grid-template-columns:repeat(2,1fr);
       gap:12px;
@@ -385,8 +392,7 @@
       color:var(--muted);
     }
     .date-badge{
-      position:relative;
-      z-index:1;
+      position:relative; z-index:1;
       margin-top:16px;
       text-align:center;
       color:var(--sage-dark);
@@ -394,9 +400,7 @@
       font-size:14px;
     }
 
-    .section{
-      padding:22px 0 0;
-    }
+    .section{padding:22px 0 0}
     .panel{
       position:relative;
       background:rgba(255,255,255,.78);
@@ -415,10 +419,7 @@
       border-radius:22px;
       pointer-events:none;
     }
-    .head{
-      text-align:center;
-      margin-bottom:28px;
-    }
+    .head{text-align:center; margin-bottom:28px}
     .mini{
       letter-spacing:.22em;
       text-transform:uppercase;
@@ -438,10 +439,7 @@
       color:#607060;
     }
 
-    .quote{
-      text-align:center;
-      padding:50px 26px;
-    }
+    .quote{text-align:center; padding:50px 26px}
     .quote p{
       max-width:790px;
       margin:0 auto;
@@ -511,7 +509,6 @@
       border-bottom:1px solid rgba(68,86,70,.22);
       padding-bottom:3px;
     }
-
     .rsvp-actions{
       display:flex;
       flex-wrap:wrap;
@@ -541,20 +538,9 @@
       background:#fff;
       border:1px solid rgba(68,86,70,.10);
     }
-
-    form{
-      display:grid;
-      gap:12px;
-      margin-top:8px;
-    }
-    .field{
-      display:grid;
-      gap:6px;
-    }
-    .field label{
-      font-size:13px;
-      color:var(--sage-dark);
-    }
+    form{display:grid; gap:12px; margin-top:8px}
+    .field{display:grid; gap:6px}
+    .field label{font-size:13px; color:var(--sage-dark)}
     .field input, .field select, .field textarea{
       width:100%;
       border-radius:16px;
@@ -565,10 +551,7 @@
       color:var(--text);
       outline:none;
     }
-    .field textarea{
-      min-height:100px;
-      resize:vertical;
-    }
+    .field textarea{min-height:100px; resize:vertical}
 
     .reveal{
       opacity:0;
@@ -588,26 +571,12 @@
     }
 
     @media (max-width: 920px){
-      .hero-grid, .grid-3, .grid-2, .rsvp-grid{
-        grid-template-columns:1fr;
-      }
-      .hero-copy{
-        text-align:center;
-        padding:18px 12px 6px;
-      }
-      .lead, .hero-note{
-        margin-inline:auto;
-      }
-      .count-card{margin-top:6px}
+      .hero-grid, .grid-3, .grid-2, .rsvp-grid{grid-template-columns:1fr}
+      .hero-copy{text-align:center; padding:18px 12px 6px}
+      .lead, .hero-note{margin-inline:auto}
+      .lang-switch{left:50%; right:auto; transform:translateX(-50%)}
     }
-
     @media (max-width: 560px){
-      .music-toggle{
-        top:auto;
-        bottom:18px;
-        right:18px;
-      }
-      .overlay-sub{font-size:14px}
       .hero-card{padding:16px 14px}
       .panel{padding:28px 14px}
       .card, .rsvp-box{padding:22px 16px}
@@ -615,19 +584,27 @@
       h1{font-size:60px}
       .count-grid{gap:10px}
       .count-box{padding:15px 8px}
+      .letter-script{font-size:36px}
+      .letter-text{font-size:15px}
+      .open-btn{padding:14px 20px}
     }
   </style>
 </head>
 <body>
+  <div class="lang-switch">
+    <button class="active" data-lang-btn="it" onclick="setLang('it')">IT</button>
+    <button data-lang-btn="ro" onclick="setLang('ro')">RO</button>
+    <button data-lang-btn="ua" onclick="setLang('ua')">UA</button>
+  </div>
+
   <div class="bg-petals" id="petals"></div>
 
-  <button class="music-toggle" id="musicToggle">Musica: Off</button>
-
   <div class="overlay" id="overlay">
-    <div class="invite-door">
-      <div class="door-wrap">
-        <div class="door door-left">
-          <div class="floral-cluster">
+    <div class="invite-stage">
+      <div class="envelope">
+        <div class="flap-top"></div>
+        <div class="letter">
+          <div class="letter-floral lt">
             <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M45 112c-14 4-28 18-35 34" stroke="#93A388" stroke-width="2.4" stroke-linecap="round"/>
               <path d="M58 95c-18-6-33-19-42-39" stroke="#A8B8A2" stroke-width="2.4" stroke-linecap="round"/>
@@ -639,16 +616,9 @@
               <circle cx="124" cy="101" r="17" fill="#F0E7DD"/>
               <circle cx="98" cy="115" r="12" fill="#FFF9F1"/>
               <circle cx="114" cy="118" r="9" fill="#F9F2EA"/>
-              <path d="M124 73c14-11 29-17 45-20" stroke="#B99763" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M120 112c17 5 31 15 43 31" stroke="#A8B8A2" stroke-width="2.2" stroke-linecap="round"/>
-              <ellipse cx="144" cy="66" rx="12" ry="7" transform="rotate(-22 144 66)" fill="#E5DDD4"/>
-              <ellipse cx="149" cy="131" rx="14" ry="8" transform="rotate(24 149 131)" fill="#DDE7D8"/>
             </svg>
           </div>
-          <div class="seal">M<br>&<br>A</div>
-        </div>
-        <div class="door door-right">
-          <div class="floral-cluster">
+          <div class="letter-floral rb">
             <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M45 112c-14 4-28 18-35 34" stroke="#93A388" stroke-width="2.4" stroke-linecap="round"/>
               <path d="M58 95c-18-6-33-19-42-39" stroke="#A8B8A2" stroke-width="2.4" stroke-linecap="round"/>
@@ -660,19 +630,16 @@
               <circle cx="124" cy="101" r="17" fill="#F0E7DD"/>
               <circle cx="98" cy="115" r="12" fill="#FFF9F1"/>
               <circle cx="114" cy="118" r="9" fill="#F9F2EA"/>
-              <path d="M124 73c14-11 29-17 45-20" stroke="#B99763" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M120 112c17 5 31 15 43 31" stroke="#A8B8A2" stroke-width="2.2" stroke-linecap="round"/>
-              <ellipse cx="144" cy="66" rx="12" ry="7" transform="rotate(-22 144 66)" fill="#E5DDD4"/>
-              <ellipse cx="149" cy="131" rx="14" ry="8" transform="rotate(24 149 131)" fill="#DDE7D8"/>
             </svg>
           </div>
+          <div class="letter-content">
+            <div class="letter-date" data-i18n="letterDate">27 settembre 2026</div>
+            <p class="letter-script" data-i18n="letterScript">Un invito da custodire</p>
+            <div class="letter-names">Maxim & Angelika</div>
+            <p class="letter-text" data-i18n="letterText">Con gioia apriamo il nostro cuore alle persone che amiamo. Saremo felici di condividere con voi la bellezza, l’emozione e la grazia del giorno più importante della nostra vita.</p>
+            <button class="open-btn" id="openInvite" data-i18n="openBtn">Apri l'invito</button>
+          </div>
         </div>
-      </div>
-
-      <div class="overlay-center">
-        <h2 class="overlay-title">Maxim & Angelika</h2>
-        <p class="overlay-sub">Con gioia vi invitiamo ad aprire il nostro invito e a entrare nel giorno più bello della nostra vita.</p>
-        <button class="open-btn" id="openInvite">Apri l'invito</button>
       </div>
     </div>
   </div>
@@ -682,31 +649,27 @@
       <div class="hero-card">
         <div class="hero-grid">
           <div class="hero-copy">
-            <div class="eyebrow">27 settembre 2026</div>
-            <p class="script">Un invito da custodire</p>
+            <div class="eyebrow" data-i18n="heroDate">27 settembre 2026</div>
+            <p class="script" data-i18n="heroScript">Un invito da ricordare</p>
             <h1>Maxim & Angelika</h1>
-            <p class="lead">
-              Con immensa gioia desideriamo condividere con voi la magia, l’eleganza e la passione del nostro matrimonio.
-              Vi aspettiamo per vivere insieme un giorno unico, delicato e indimenticabile, avvolto da luce, fiori e amore.
-            </p>
+            <p class="lead" data-i18n="heroText">Con immensa gioia desideriamo condividere con voi la magia, l’eleganza e la passione del nostro matrimonio. Vi invitiamo a vivere insieme a noi un giorno unico, delicato e indimenticabile, avvolto da luce, armonia e amore.</p>
 
-            <div class="hero-note">
-              La vostra presenza è per noi davvero importante. Ci teniamo tanto ad avervi accanto in questo giorno speciale
-              e saremo felici di condividere con voi ogni emozione, ogni sorriso e ogni momento del nostro sì.
+            <div class="hero-note" data-i18n="heroNote">
+              La vostra presenza renderà questa celebrazione ancora più speciale. Per noi sarà un dono prezioso avervi accanto e custodire insieme ricordi che resteranno nel cuore per sempre.
             </div>
 
-            <a class="scroll-link" href="#programma">Scopri l'invito</a>
+            <a class="scroll-link" href="#programma" data-i18n="scrollBtn">Scopri l'invito</a>
           </div>
 
           <div class="count-card">
-            <div class="count-title">Manca al nostro sì</div>
+            <div class="count-title" data-i18n="countTitle">Manca al nostro sì</div>
             <div class="count-grid">
-              <div class="count-box"><span class="num" id="days">0</span><span class="label">Giorni</span></div>
-              <div class="count-box"><span class="num" id="hours">0</span><span class="label">Ore</span></div>
-              <div class="count-box"><span class="num" id="minutes">0</span><span class="label">Minuti</span></div>
-              <div class="count-box"><span class="num" id="seconds">0</span><span class="label">Secondi</span></div>
+              <div class="count-box"><span class="num" id="days">0</span><span class="label" data-i18n="days">Giorni</span></div>
+              <div class="count-box"><span class="num" id="hours">0</span><span class="label" data-i18n="hours">Ore</span></div>
+              <div class="count-box"><span class="num" id="minutes">0</span><span class="label" data-i18n="minutes">Minuti</span></div>
+              <div class="count-box"><span class="num" id="seconds">0</span><span class="label" data-i18n="seconds">Secondi</span></div>
             </div>
-            <div class="date-badge">Domenica 27 settembre 2026 · ore 13:00</div>
+            <div class="date-badge" data-i18n="dateBadge">Domenica 27 settembre 2026 · ore 13:00</div>
           </div>
         </div>
       </div>
@@ -714,7 +677,7 @@
 
     <section class="wrap section reveal">
       <div class="panel quote">
-        <p>“Sarà per noi una gioia immensa avervi con noi. La vostra presenza renderà questo giorno ancora più prezioso e indimenticabile.”</p>
+        <p data-i18n="quote">“Condividere questo giorno con voi sarà una delle gioie più grandi del nostro matrimonio.”</p>
         <span class="sig">M & A</span>
       </div>
     </section>
@@ -722,9 +685,9 @@
     <section class="wrap section reveal" id="programma">
       <div class="panel">
         <div class="head">
-          <div class="mini">programma</div>
-          <h2>La nostra giornata</h2>
-          <p>
+          <div class="mini" data-i18n="programMini">programma</div>
+          <h2 data-i18n="programTitle">La nostra giornata</h2>
+          <p data-i18n="programText">
             Abbiamo immaginato questo giorno con amore, eleganza e dolcezza.
             Saremo felici di viverlo insieme a voi, dal primo istante fino al brindisi finale.
           </p>
@@ -732,16 +695,16 @@
 
         <div class="grid-3">
           <div class="card">
-            <h3>Accoglienza</h3>
-            <p>Vi aspettiamo con emozione e gratitudine, felici di iniziare insieme questo giorno così atteso.</p>
+            <h3 data-i18n="card1Title">Accoglienza</h3>
+            <p data-i18n="card1Text">L’inizio di una giornata speciale, da condividere con le persone che custodiamo con affetto nel nostro cuore.</p>
           </div>
           <div class="card">
-            <h3>Promessa</h3>
-            <p>Nel silenzio della cerimonia e nello splendore del momento, il nostro sì prenderà vita davanti alle persone che amiamo.</p>
+            <h3 data-i18n="card2Title">Promessa</h3>
+            <p data-i18n="card2Text">Nel silenzio della cerimonia e nello splendore del momento, il nostro sì prenderà vita davanti alle persone che per noi contano di più.</p>
           </div>
           <div class="card">
-            <h3>Festeggiamenti</h3>
-            <p>Brindisi, musica, sorrisi e abbracci accompagneranno la festa, per creare ricordi che porteremo nel cuore per sempre.</p>
+            <h3 data-i18n="card3Title">Festeggiamenti</h3>
+            <p data-i18n="card3Text">Brindisi, musica, sorrisi e abbracci accompagneranno la festa, per creare ricordi che porteremo nel cuore per sempre.</p>
           </div>
         </div>
       </div>
@@ -750,34 +713,34 @@
     <section class="wrap section reveal">
       <div class="panel">
         <div class="head">
-          <div class="mini">dove e quando</div>
-          <h2>I luoghi del nostro sì</h2>
-          <p>
+          <div class="mini" data-i18n="whereMini">dove e quando</div>
+          <h2 data-i18n="whereTitle">I luoghi del nostro sì</h2>
+          <p data-i18n="whereText">
             Due luoghi scelti con il cuore, per accompagnarci in una giornata che ricorderemo per sempre.
           </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <span class="time">Ore 13:00</span>
-            <h3>Cerimonia religiosa</h3>
-            <p>
+            <span class="time" data-i18n="ceremonyTime">Ore 13:00</span>
+            <h3 data-i18n="ceremonyTitle">Cerimonia religiosa</h3>
+            <p data-i18n="ceremonyText">
               Chiesa Ortodossa Rumena San Giorgio<br>
               Via Umberto Terracini, 4<br>
               20090 Fizzonasco (Rozzano, MI)
             </p>
-            <a class="map-link" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Chiesa+Ortodossa+Rumena+San+Giorgio+Via+Umberto+Terracini+4+Fizzonasco+Rozzano+MI">Apri mappa</a>
+            <a class="map-link" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Chiesa+Ortodossa+Rumena+San+Giorgio+Via+Umberto+Terracini+4+Fizzonasco+Rozzano+MI" data-i18n="openMap">Apri mappa</a>
           </div>
 
           <div class="card">
-            <span class="time">Ore 16:00</span>
-            <h3>Ricevimento</h3>
-            <p>
+            <span class="time" data-i18n="receptionTime">Ore 16:00</span>
+            <h3 data-i18n="receptionTitle">Ricevimento</h3>
+            <p data-i18n="receptionText">
               La Boero<br>
               Via del Guado 57<br>
               Desio
             </p>
-            <a class="map-link" target="_blank" href="https://www.google.com/maps/search/?api=1&query=La+Boero+Via+del+Guado+57+Desio">Apri mappa</a>
+            <a class="map-link" target="_blank" href="https://www.google.com/maps/search/?api=1&query=La+Boero+Via+del+Guado+57+Desio" data-i18n="openMap">Apri mappa</a>
           </div>
         </div>
       </div>
@@ -787,27 +750,27 @@
       <div class="panel">
         <div class="head">
           <div class="mini">rsvp</div>
-          <h2>Gentile conferma</h2>
-          <p>
+          <h2 data-i18n="rsvpTitle">Gentile conferma</h2>
+          <p data-i18n="rsvpText">
             Saremo felici di ricevere una vostra conferma entro il 27 agosto 2026.
           </p>
         </div>
 
         <div class="rsvp-grid">
           <div class="rsvp-box">
-            <h3>Conferma la tua presenza</h3>
-            <p>
+            <h3 data-i18n="formTitle">Conferma la tua presenza</h3>
+            <p data-i18n="formText">
               Compila i campi qui sotto e invia la tua risposta direttamente su WhatsApp.
             </p>
 
             <form id="rsvpForm">
               <div class="field">
-                <label for="name">Nome e cognome</label>
+                <label for="name" data-i18n="nameLabel">Nome e cognome</label>
                 <input id="name" type="text" required>
               </div>
 
               <div class="field">
-                <label for="attend">Parteciperai?</label>
+                <label for="attend" data-i18n="attendLabel">Parteciperai?</label>
                 <select id="attend">
                   <option value="Sì">Sì</option>
                   <option value="No">No</option>
@@ -815,27 +778,26 @@
               </div>
 
               <div class="field">
-                <label for="message">Messaggio</label>
-                <textarea id="message" placeholder="Scrivi un pensiero o una nota..."></textarea>
+                <label for="message" data-i18n="messageLabel">Messaggio</label>
+                <textarea id="message" data-i18n-placeholder="messagePlaceholder" placeholder="Scrivi un pensiero o una nota..."></textarea>
               </div>
 
-              <button class="btn btn-wa" type="submit">Invia su WhatsApp</button>
+              <button class="btn btn-wa" type="submit" data-i18n="sendBtn">Invia su WhatsApp</button>
             </form>
           </div>
 
           <div class="rsvp-box">
-            <h3>Vi aspettiamo con il cuore</h3>
-            <p>
-              Per noi sarà davvero speciale condividere questo giorno con voi.
-              La vostra presenza non sarà soltanto un invito accettato, ma un ricordo prezioso che renderà il nostro matrimonio ancora più bello.
+            <h3 data-i18n="guestTitle">Un posto speciale per voi</h3>
+            <p data-i18n="guestText">
+              Sapere che sarete con noi in questo giorno così importante ci riempie di gioia. La vostra presenza darà ancora più luce, calore e significato alla nostra festa.
             </p>
 
             <div class="rsvp-actions">
-              <a class="btn btn-wa" href="https://wa.me/393471946304?text=Ciao%2C%20confermo%20la%20mia%20presenza%20al%20matrimonio%20di%20Maxim%20e%20Angelika." target="_blank">Conferma veloce</a>
-              <a class="btn btn-soft" href="tel:+393471946304">Chiama</a>
+              <a class="btn btn-wa" href="https://wa.me/393471946304?text=Ciao%2C%20confermo%20la%20mia%20presenza%20al%20matrimonio%20di%20Maxim%20e%20Angelika." target="_blank" data-i18n="quickBtn">Conferma veloce</a>
+              <a class="btn btn-soft" href="tel:+393471946304" data-i18n="callBtn">Chiama</a>
             </div>
 
-            <p style="margin-top:18px;color:#788478;font-size:13px;line-height:1.8;">
+            <p style="margin-top:18px;color:#788478;font-size:13px;line-height:1.8;" data-i18n="rsvpNumber">
               RSVP: 347 194 6304
             </p>
           </div>
@@ -843,17 +805,200 @@
       </div>
     </section>
 
-    <footer>
+    <footer data-i18n="footer">
       Con amore, Maxim & Angelika · 27 settembre 2026
     </footer>
   </main>
 
-  <!-- Se vuoi la musica, carica nel repository anche un file chiamato music.mp3 -->
-  <audio id="bgMusic" loop preload="auto">
-    <source src="music.mp3" type="audio/mpeg">
-  </audio>
-
   <script>
+    const translations = {
+      it: {
+        letterDate: "27 settembre 2026",
+        letterScript: "Un invito da custodire",
+        letterText: "Con gioia apriamo il nostro cuore alle persone che amiamo. Saremo felici di condividere con voi la bellezza, l’emozione e la grazia del giorno più importante della nostra vita.",
+        openBtn: "Apri l'invito",
+        heroDate: "27 settembre 2026",
+        heroScript: "Un invito da ricordare",
+        heroText: "Con immensa gioia desideriamo condividere con voi la magia, l’eleganza e la passione del nostro matrimonio. Vi invitiamo a vivere insieme a noi un giorno unico, delicato e indimenticabile, avvolto da luce, armonia e amore.",
+        heroNote: "La vostra presenza renderà questa celebrazione ancora più speciale. Per noi sarà un dono prezioso avervi accanto e custodire insieme ricordi che resteranno nel cuore per sempre.",
+        scrollBtn: "Scopri l'invito",
+        countTitle: "Manca al nostro sì",
+        days: "Giorni",
+        hours: "Ore",
+        minutes: "Minuti",
+        seconds: "Secondi",
+        dateBadge: "Domenica 27 settembre 2026 · ore 13:00",
+        quote: "“Condividere questo giorno con voi sarà una delle gioie più grandi del nostro matrimonio.”",
+        programMini: "programma",
+        programTitle: "La nostra giornata",
+        programText: "Abbiamo immaginato questo giorno con amore, eleganza e dolcezza. Saremo felici di viverlo insieme a voi, dal primo istante fino al brindisi finale.",
+        card1Title: "Accoglienza",
+        card1Text: "L’inizio di una giornata speciale, da condividere con le persone che custodiamo con affetto nel nostro cuore.",
+        card2Title: "Promessa",
+        card2Text: "Nel silenzio della cerimonia e nello splendore del momento, il nostro sì prenderà vita davanti alle persone che per noi contano di più.",
+        card3Title: "Festeggiamenti",
+        card3Text: "Brindisi, musica, sorrisi e abbracci accompagneranno la festa, per creare ricordi che porteremo nel cuore per sempre.",
+        whereMini: "dove e quando",
+        whereTitle: "I luoghi del nostro sì",
+        whereText: "Due luoghi scelti con il cuore, per accompagnarci in una giornata che ricorderemo per sempre.",
+        ceremonyTime: "Ore 13:00",
+        ceremonyTitle: "Cerimonia religiosa",
+        ceremonyText: "Chiesa Ortodossa Rumena San Giorgio<br>Via Umberto Terracini, 4<br>20090 Fizzonasco (Rozzano, MI)",
+        receptionTime: "Ore 16:00",
+        receptionTitle: "Ricevimento",
+        receptionText: "La Boero<br>Via del Guado 57<br>Desio",
+        openMap: "Apri mappa",
+        rsvpTitle: "Gentile conferma",
+        rsvpText: "Saremo felici di ricevere una vostra conferma entro il 27 agosto 2026.",
+        formTitle: "Conferma la tua presenza",
+        formText: "Compila i campi qui sotto e invia la tua risposta direttamente su WhatsApp.",
+        nameLabel: "Nome e cognome",
+        attendLabel: "Parteciperai?",
+        messageLabel: "Messaggio",
+        messagePlaceholder: "Scrivi un pensiero o una nota...",
+        sendBtn: "Invia su WhatsApp",
+        guestTitle: "Un posto speciale per voi",
+        guestText: "Sapere che sarete con noi in questo giorno così importante ci riempie di gioia. La vostra presenza darà ancora più luce, calore e significato alla nostra festa.",
+        quickBtn: "Conferma veloce",
+        callBtn: "Chiama",
+        rsvpNumber: "RSVP: 347 194 6304",
+        footer: "Con amore, Maxim & Angelika · 27 settembre 2026",
+        yes: "Sì",
+        no: "No"
+      },
+      ro: {
+        letterDate: "27 septembrie 2026",
+        letterScript: "O invitație de păstrat",
+        letterText: "Cu bucurie ne deschidem inimile către oamenii pe care îi iubim. Vom fi fericiți să împărtășim cu voi frumusețea, emoția și grația celei mai importante zile din viața noastră.",
+        openBtn: "Deschide invitația",
+        heroDate: "27 septembrie 2026",
+        heroScript: "O invitație de neuitat",
+        heroText: "Cu imensă bucurie dorim să împărtășim cu voi magia, eleganța și emoția nunții noastre. Vă invităm să trăiți alături de noi o zi unică, delicată și de neuitat, învăluită în lumină, armonie și iubire.",
+        heroNote: "Prezența voastră va face această sărbătoare și mai specială. Pentru noi va fi un dar prețios să vă avem aproape și să păstrăm împreună amintiri care vor rămâne în inimă pentru totdeauna.",
+        scrollBtn: "Descoperă invitația",
+        countTitle: "Timp rămas până la da-ul nostru",
+        days: "Zile",
+        hours: "Ore",
+        minutes: "Minute",
+        seconds: "Secunde",
+        dateBadge: "Duminică, 27 septembrie 2026 · ora 13:00",
+        quote: "„A împărtăși această zi cu voi va fi una dintre cele mai mari bucurii ale nunții noastre.”",
+        programMini: "program",
+        programTitle: "Ziua noastră",
+        programText: "Am imaginat această zi cu iubire, eleganță și delicatețe. Vom fi fericiți să o trăim împreună cu voi, din primul moment până la ultimul toast.",
+        card1Title: "Primire",
+        card1Text: "Începutul unei zile speciale, de împărtășit cu oamenii pe care îi păstrăm cu drag în inimă.",
+        card2Title: "Promisiune",
+        card2Text: "În liniștea ceremoniei și în frumusețea momentului, da-ul nostru va prinde viață în fața celor care contează cel mai mult pentru noi.",
+        card3Title: "Sărbătoare",
+        card3Text: "Toasturi, muzică, zâmbete și îmbrățișări vor însoți petrecerea, pentru a crea amintiri pe care le vom purta mereu în suflet.",
+        whereMini: "unde și când",
+        whereTitle: "Locurile zilei noastre",
+        whereText: "Două locuri alese cu inima, pentru a ne însoți într-o zi pe care o vom păstra pentru totdeauna.",
+        ceremonyTime: "Ora 13:00",
+        ceremonyTitle: "Ceremonia religioasă",
+        ceremonyText: "Biserica Ortodoxă Română San Giorgio<br>Via Umberto Terracini, 4<br>20090 Fizzonasco (Rozzano, MI)",
+        receptionTime: "Ora 16:00",
+        receptionTitle: "Recepție",
+        receptionText: "La Boero<br>Via del Guado 57<br>Desio",
+        openMap: "Deschide harta",
+        rsvpTitle: "Confirmare prezență",
+        rsvpText: "Ne vom bucura să primim confirmarea voastră până la 27 august 2026.",
+        formTitle: "Confirmă prezența",
+        formText: "Completează câmpurile de mai jos și trimite răspunsul direct pe WhatsApp.",
+        nameLabel: "Nume și prenume",
+        attendLabel: "Vei participa?",
+        messageLabel: "Mesaj",
+        messagePlaceholder: "Scrie un gând sau o notă...",
+        sendBtn: "Trimite pe WhatsApp",
+        guestTitle: "Un loc special pentru voi",
+        guestText: "Faptul că veți fi alături de noi în această zi atât de importantă ne umple de bucurie. Prezența voastră va aduce și mai multă lumină, căldură și sens sărbătorii noastre.",
+        quickBtn: "Confirmare rapidă",
+        callBtn: "Sună",
+        rsvpNumber: "RSVP: 347 194 6304",
+        footer: "Cu dragoste, Maxim & Angelika · 27 septembrie 2026",
+        yes: "Da",
+        no: "Nu"
+      },
+      ua: {
+        letterDate: "27 вересня 2026",
+        letterScript: "Запрошення, яке хочеться зберегти",
+        letterText: "З радістю ми відкриваємо наші серця людям, яких любимо. Нам буде щиро приємно розділити з вами красу, хвилювання та ніжність найважливішого дня нашого життя.",
+        openBtn: "Відкрити запрошення",
+        heroDate: "27 вересня 2026",
+        heroScript: "Запрошення, яке запам’ятається",
+        heroText: "З безмежною радістю ми хочемо поділитися з вами магією, елегантністю та хвилюванням нашого весілля. Ми запрошуємо вас прожити разом з нами особливий, ніжний і незабутній день, сповнений світла, гармонії та любові.",
+        heroNote: "Ваша присутність зробить це свято ще більш особливим. Для нас буде безцінним подарунком бачити вас поруч і зберегти разом спогади, які залишаться в серці назавжди.",
+        scrollBtn: "Переглянути запрошення",
+        countTitle: "Залишилось до нашого «так»",
+        days: "Днів",
+        hours: "Годин",
+        minutes: "Хвилин",
+        seconds: "Секунд",
+        dateBadge: "Неділя, 27 вересня 2026 · 13:00",
+        quote: "«Розділити цей день з вами — одна з найбільших радостей нашого весілля.»",
+        programMini: "програма",
+        programTitle: "Наш день",
+        programText: "Ми уявляли цей день з любов’ю, елегантністю та ніжністю. Нам буде радісно прожити його разом із вами від першої миті до останнього тосту.",
+        card1Title: "Зустріч",
+        card1Text: "Початок особливого дня, який ми хочемо розділити з людьми, що займають важливе місце в нашому серці.",
+        card2Title: "Обіцянка",
+        card2Text: "У тиші церемонії та в красі цієї миті наше «так» оживе перед людьми, які для нас найдорожчі.",
+        card3Title: "Святкування",
+        card3Text: "Тости, музика, усмішки та обійми супроводжуватимуть наше свято, створюючи спогади, які ми назавжди збережемо у серці.",
+        whereMini: "де і коли",
+        whereTitle: "Місця нашого дня",
+        whereText: "Два місця, обрані серцем, щоб супроводжувати нас у дні, який ми запам’ятаємо назавжди.",
+        ceremonyTime: "13:00",
+        ceremonyTitle: "Релігійна церемонія",
+        ceremonyText: "Румунська Православна Церква San Giorgio<br>Via Umberto Terracini, 4<br>20090 Fizzonasco (Rozzano, MI)",
+        receptionTime: "16:00",
+        receptionTitle: "Святкування",
+        receptionText: "La Boero<br>Via del Guado 57<br>Desio",
+        openMap: "Відкрити мапу",
+        rsvpTitle: "Підтвердження присутності",
+        rsvpText: "Ми будемо раді отримати ваше підтвердження до 27 серпня 2026 року.",
+        formTitle: "Підтвердіть вашу присутність",
+        formText: "Заповніть поля нижче та надішліть відповідь безпосередньо у WhatsApp.",
+        nameLabel: "Ім’я та прізвище",
+        attendLabel: "Чи будете присутні?",
+        messageLabel: "Повідомлення",
+        messagePlaceholder: "Напишіть побажання або нотатку...",
+        sendBtn: "Надіслати у WhatsApp",
+        guestTitle: "Особливе місце для вас",
+        guestText: "Думка про те, що ви будете поруч у цей важливий день, наповнює нас радістю. Ваша присутність додасть нашому святу ще більше світла, тепла та змісту.",
+        quickBtn: "Швидке підтвердження",
+        callBtn: "Подзвонити",
+        rsvpNumber: "RSVP: 347 194 6304",
+        footer: "З любов’ю, Maxim & Angelika · 27 вересня 2026",
+        yes: "Так",
+        no: "Ні"
+      }
+    };
+
+    let currentLang = 'it';
+
+    function setLang(lang){
+      currentLang = lang;
+      document.documentElement.lang = lang === 'ua' ? 'uk' : lang;
+      document.querySelectorAll('[data-lang-btn]').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang-btn') === lang);
+      });
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(translations[lang][key] !== undefined){
+          el.innerHTML = translations[lang][key];
+        }
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = translations[lang][key] || '';
+      });
+      const attend = document.getElementById('attend');
+      attend.options[0].text = translations[lang].yes;
+      attend.options[1].text = translations[lang].no;
+    }
+
     const overlay = document.getElementById('overlay');
     const content = document.getElementById('content');
     const openInvite = document.getElementById('openInvite');
@@ -863,7 +1008,7 @@
       setTimeout(() => {
         overlay.classList.add('hidden');
         content.classList.add('ready');
-      }, 1050);
+      }, 1100);
     });
 
     const weddingDate = new Date('2026-09-27T13:00:00+02:00').getTime();
@@ -871,12 +1016,10 @@
       const now = Date.now();
       let diff = weddingDate - now;
       if(diff < 0) diff = 0;
-
       const days = Math.floor(diff / (1000*60*60*24));
       const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
       const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
       const seconds = Math.floor((diff % (1000*60)) / 1000);
-
       document.getElementById('days').textContent = days;
       document.getElementById('hours').textContent = String(hours).padStart(2,'0');
       document.getElementById('minutes').textContent = String(minutes).padStart(2,'0');
@@ -894,37 +1037,17 @@
     reveals.forEach(el => obs.observe(el));
 
     const petals = document.getElementById('petals');
-    for(let i=0;i<18;i++){
+    for(let i=0;i<22;i++){
       const p = document.createElement('span');
       p.className = 'petal';
       p.style.left = Math.random()*100 + 'vw';
       p.style.setProperty('--drift', (Math.random()*140 - 70) + 'px');
       p.style.animationDuration = (10 + Math.random()*14) + 's';
       p.style.animationDelay = (-Math.random()*18) + 's';
-      p.style.opacity = (0.14 + Math.random()*0.22).toFixed(2);
+      p.style.opacity = (0.12 + Math.random()*0.20).toFixed(2);
       p.style.transform = 'scale(' + (0.7 + Math.random()*0.8) + ')';
       petals.appendChild(p);
     }
-
-    const music = document.getElementById('bgMusic');
-    const musicToggle = document.getElementById('musicToggle');
-    let musicOn = false;
-
-    musicToggle.addEventListener('click', async () => {
-      try{
-        if(!musicOn){
-          await music.play();
-          musicOn = true;
-          musicToggle.textContent = 'Musica: On';
-        }else{
-          music.pause();
-          musicOn = false;
-          musicToggle.textContent = 'Musica: Off';
-        }
-      }catch(e){
-        alert('Per la musica, aggiungi nel repository un file chiamato music.mp3');
-      }
-    });
 
     document.getElementById('rsvpForm').addEventListener('submit', function(e){
       e.preventDefault();
@@ -932,9 +1055,15 @@
       const attend = document.getElementById('attend').value;
       const message = document.getElementById('message').value.trim();
 
-      const text = `Ciao! Confermo la mia risposta per il matrimonio di Maxim & Angelika.%0ANome: ${encodeURIComponent(name)}%0APresenza: ${encodeURIComponent(attend)}%0AMessaggio: ${encodeURIComponent(message || '-')}`;
+      let intro = "Ciao! Confermo la mia risposta per il matrimonio di Maxim & Angelika.";
+      if(currentLang === 'ro') intro = "Bună! Confirm răspunsul meu pentru nunta lui Maxim & Angelika.";
+      if(currentLang === 'ua') intro = "Вітаю! Підтверджую свою відповідь на весілля Maxim & Angelika.";
+
+      const text = `${intro}%0A${encodeURIComponent(translations[currentLang].nameLabel)}: ${encodeURIComponent(name)}%0A${encodeURIComponent(translations[currentLang].attendLabel)}: ${encodeURIComponent(attend)}%0A${encodeURIComponent(translations[currentLang].messageLabel)}: ${encodeURIComponent(message || '-')}`;
       window.open(`https://wa.me/393471946304?text=${text}`, '_blank');
     });
+
+    setLang('it');
   </script>
 </body>
 </html>
