@@ -1,137 +1,715 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maxim & Angelika</title>
-<style>
-body{
- font-family: serif;
- background:#f7f6f1;
- color:#2f3e2f;
- text-align:center;
- padding:40px 20px;
-}
-h1{font-size:40px;margin-bottom:10px;}
-p{max-width:500px;margin:10px auto;}
-.box{
- background:white;
- border-radius:20px;
- padding:20px;
- margin:20px auto;
- max-width:500px;
- box-shadow:0 10px 30px rgba(0,0,0,0.05);
-}
-select, input, textarea{
- width:100%;
- padding:12px;
- border-radius:10px;
- border:1px solid #ccc;
- margin-top:10px;
-}
-button{
- margin-top:20px;
- padding:15px;
- width:100%;
- border:none;
- border-radius:20px;
- background:#5a6d5a;
- color:white;
- font-size:16px;
-}
-.lang{
- position:fixed;
- top:10px;
- right:10px;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maxim & Angelika</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f7f5ef;
+      --card:#fffdf8;
+      --sage:#aebaa7;
+      --sage-dark:#6b7b66;
+      --green:#445645;
+      --gold:#b89b6a;
+      --text:#364536;
+      --muted:#6e7a6d;
+      --line:rgba(68,86,69,.12);
+      --shadow:0 18px 48px rgba(49,66,50,.08);
+      --radius:28px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(184,155,106,.08), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(174,186,167,.16), transparent 28%),
+        linear-gradient(180deg,#fbf9f4 0%,#f4f3ed 55%,#eff3ea 100%);
+      overflow-x:hidden;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      z-index:0;
+      width:240px;
+      height:240px;
+      opacity:.14;
+      pointer-events:none;
+      background-repeat:no-repeat;
+      background-size:contain;
+    }
+    body::before{
+      left:-16px;
+      top:-12px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%236b7b66' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M96 120c-16 0-29 10-37 25 17 0 29-8 37-24Z'/%3E%3Cpath d='M96 120c0-16 9-29 22-38 1 16-7 29-22 38Z'/%3E%3Cpath d='M96 120c14 8 30 7 43-4-13-8-29-8-43 4Z'/%3E%3Cpath d='M102 127c8 22 23 42 44 58'/%3E%3Cpath d='M71 79c-10 1-18 7-23 16 10 0 18-7 23-16Z'/%3E%3Cpath d='M71 79c1-10 7-18 15-24 1 10-4 18-15 24Z'/%3E%3Cpath d='M71 79c9 5 19 4 28-3-9-5-18-5-28 3Z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    body::after{
+      right:-12px;
+      bottom:-8px;
+      transform:scaleX(-1);
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%236b7b66' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M96 120c-16 0-29 10-37 25 17 0 29-8 37-24Z'/%3E%3Cpath d='M96 120c0-16 9-29 22-38 1 16-7 29-22 38Z'/%3E%3Cpath d='M96 120c14 8 30 7 43-4-13-8-29-8-43 4Z'/%3E%3Cpath d='M102 127c8 22 23 42 44 58'/%3E%3Cpath d='M71 79c-10 1-18 7-23 16 10 0 18-7 23-16Z'/%3E%3Cpath d='M71 79c1-10 7-18 15-24 1 10-4 18-15 24Z'/%3E%3Cpath d='M71 79c9 5 19 4 28-3-9-5-18-5-28 3Z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .petals{
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      pointer-events:none;
+      z-index:0;
+    }
+    .petal{
+      position:absolute;
+      top:-10vh;
+      width:14px;
+      height:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(235,227,216,.88));
+      border-radius:60% 40% 65% 35% / 55% 40% 60% 45%;
+      opacity:.20;
+      animation:fall linear infinite;
+    }
+    @keyframes fall{
+      0%{transform:translate3d(0,-10vh,0) rotate(0deg)}
+      100%{transform:translate3d(var(--drift),110vh,0) rotate(320deg)}
+    }
+
+    .lang-switch{
+      position:fixed;
+      top:16px;
+      right:16px;
+      z-index:30;
+      background:rgba(255,253,248,.88);
+      border:1px solid rgba(68,86,69,.10);
+      box-shadow:var(--shadow);
+      border-radius:999px;
+      padding:8px;
+      display:flex;
+      gap:8px;
+      backdrop-filter:blur(10px);
+    }
+    .lang-switch button{
+      border:none;
+      background:transparent;
+      color:var(--green);
+      padding:10px 16px;
+      border-radius:999px;
+      font:600 12px/1 'Inter',sans-serif;
+      cursor:pointer;
+      letter-spacing:.08em;
+    }
+    .lang-switch button.active{
+      background:rgba(174,186,167,.24);
+    }
+
+    .wrap{position:relative; z-index:1; width:min(1020px, calc(100% - 28px)); margin:0 auto;}
+    .hero{
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      padding:84px 0 30px;
+    }
+    .hero-card{
+      width:100%;
+      background:linear-gradient(180deg, rgba(255,253,248,.95), rgba(250,249,244,.92));
+      border:1px solid rgba(68,86,69,.10);
+      border-radius:34px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hero-inner{
+      padding:64px 28px 28px;
+      text-align:center;
+      position:relative;
+    }
+    .hero-inner::before,
+    .hero-inner::after{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      opacity:.18;
+      background-repeat:no-repeat;
+      background-size:contain;
+      pointer-events:none;
+    }
+    .hero-inner::before{
+      top:12px;
+      left:10px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23aebaa7' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M80 95c-14 0-25 9-32 22 15 0 25-7 32-21Z'/%3E%3Cpath d='M80 95c0-14 8-25 20-33 1 14-6 25-20 33Z'/%3E%3Cpath d='M80 95c13 7 26 6 38-4-12-7-25-7-38 4Z'/%3E%3Cpath d='M86 101c6 18 18 33 36 47'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-inner::after{
+      right:8px;
+      bottom:18px;
+      transform:scaleX(-1);
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23aebaa7' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M80 95c-14 0-25 9-32 22 15 0 25-7 32-21Z'/%3E%3Cpath d='M80 95c0-14 8-25 20-33 1 14-6 25-20 33Z'/%3E%3Cpath d='M80 95c13 7 26 6 38-4-12-7-25-7-38 4Z'/%3E%3Cpath d='M86 101c6 18 18 33 36 47'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .eyebrow{
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(174,186,167,.18);
+      color:var(--sage-dark);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.72rem;
+      margin-bottom:18px;
+    }
+    .script{
+      margin:0 0 4px;
+      font-family:'Great Vibes',cursive;
+      font-size:clamp(2.5rem,7vw,5rem);
+      color:var(--sage-dark);
+      font-weight:400;
+      line-height:1;
+    }
+    .title{
+      margin:0;
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(3rem,9vw,5.8rem);
+      line-height:.93;
+      color:var(--green);
+      font-weight:600;
+    }
+    .lead{
+      width:min(680px,100%);
+      margin:22px auto 0;
+      color:var(--muted);
+      font-size:clamp(1rem,2.5vw,1.15rem);
+    }
+    .note{
+      width:min(720px,100%);
+      margin:18px auto 0;
+      color:#5f6d5d;
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.18rem,3vw,1.65rem);
+    }
+    .hero-actions{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+    .btn{
+      border:none;
+      text-decoration:none;
+      border-radius:999px;
+      padding:14px 22px;
+      font:600 14px/1 'Inter',sans-serif;
+      cursor:pointer;
+      min-width:180px;
+    }
+    .btn-primary{
+      background:linear-gradient(180deg, #6c7b67, #546251);
+      color:#fff;
+      box-shadow:0 10px 24px rgba(84,98,81,.18);
+    }
+    .btn-secondary{
+      background:rgba(255,255,255,.82);
+      color:var(--green);
+      border:1px solid rgba(68,86,69,.12);
+    }
+
+    .count-shell{
+      padding:24px 18px 28px;
+      background:linear-gradient(180deg, rgba(255,255,255,.70), rgba(241,242,234,.75));
+      border-top:1px solid rgba(68,86,69,.08);
+    }
+    .count-title{
+      text-align:center;
+      margin:0 0 16px;
+      font-family:'Cormorant Garamond',serif;
+      color:var(--green);
+      font-size:1.6rem;
+    }
+    .count-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+    .count-box{
+      background:rgba(255,255,255,.82);
+      border:1px solid rgba(68,86,69,.10);
+      border-radius:22px;
+      padding:18px 10px;
+      text-align:center;
+    }
+    .count-number{
+      display:block;
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,5vw,3rem);
+      color:var(--green);
+      line-height:1;
+      font-weight:600;
+    }
+    .count-label{
+      display:block;
+      margin-top:6px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--muted);
+      font-size:.82rem;
+    }
+
+    section{padding:24px 0 0}
+    .card{
+      background:rgba(255,253,248,.94);
+      border:1px solid rgba(68,86,69,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:40px 24px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      bottom:-18px;
+      width:150px;
+      height:150px;
+      opacity:.12;
+      background-repeat:no-repeat;
+      background-size:contain;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%236b7b66' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M80 95c-14 0-25 9-32 22 15 0 25-7 32-21Z'/%3E%3Cpath d='M80 95c0-14 8-25 20-33 1 14-6 25-20 33Z'/%3E%3Cpath d='M80 95c13 7 26 6 38-4-12-7-25-7-38 4Z'/%3E%3Cpath d='M86 101c6 18 18 33 36 47'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .tag{
+      text-align:center;
+      display:block;
+      color:#7c8979;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.72rem;
+      margin-bottom:10px;
+    }
+    .section-title{
+      margin:0;
+      text-align:center;
+      font-family:'Cormorant Garamond',serif;
+      color:var(--green);
+      font-size:clamp(2rem,6vw,3.4rem);
+      line-height:1;
+    }
+    .section-text{
+      width:min(730px,100%);
+      margin:14px auto 0;
+      text-align:center;
+      color:var(--muted);
+      font-size:1rem;
+    }
+    .quote{
+      width:min(760px,100%);
+      margin:16px auto 0;
+      text-align:center;
+      color:#5a6758;
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.2rem,3vw,1.8rem);
+    }
+
+    .details-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+      margin-top:26px;
+    }
+    .detail{
+      background:linear-gradient(180deg, #ffffff, #f6f7f0);
+      border:1px solid rgba(68,86,69,.10);
+      border-radius:24px;
+      padding:24px 18px;
+      text-align:center;
+    }
+    .detail h3{
+      margin:0 0 8px;
+      font-family:'Cormorant Garamond',serif;
+      color:var(--green);
+      font-size:2rem;
+    }
+    .detail p{
+      margin:6px 0;
+      color:#536152;
+    }
+
+    .rsvp-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-top:22px;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .field.full{grid-column:1 / -1}
+    label{
+      color:#5f6d5d;
+      font-size:.92rem;
+      font-weight:600;
+    }
+    input, select, textarea{
+      width:100%;
+      border:1px solid rgba(68,86,69,.16);
+      border-radius:16px;
+      padding:14px;
+      font:inherit;
+      color:var(--text);
+      background:rgba(255,255,255,.92);
+      outline:none;
+    }
+    textarea{min-height:120px; resize:vertical}
+
+    .footer{
+      padding:28px 0 52px;
+      text-align:center;
+      color:#788377;
+      font-size:.95rem;
+    }
+
+    @media (max-width:760px){
+      .count-grid, .details-grid, .rsvp-grid{grid-template-columns:1fr}
+      .lang-switch{
+        top:auto;
+        bottom:16px;
+        right:50%;
+        transform:translateX(50%);
+      }
+      .btn{width:100%; min-width:unset}
+      .hero-actions{flex-direction:column}
+      .hero-inner{padding:88px 18px 24px}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="petals" id="petals"></div>
 
-<div class="lang">
-<button onclick="setLang('it')">IT</button>
-<button onclick="setLang('ro')">RO</button>
-<button onclick="setLang('ua')">UA</button>
-</div>
+  <div class="lang-switch">
+    <button class="active" data-lang="it">IT</button>
+    <button data-lang="ro">RO</button>
+    <button data-lang="ua">UA</button>
+  </div>
 
-<h1>Maxim & Angelika</h1>
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-card">
+        <div class="hero-inner">
+          <div class="eyebrow" data-i18n="eyebrow">27 settembre 2026</div>
+          <p class="script" data-i18n="script">Con immensa gioia</p>
+          <h1 class="title">Maxim & Angelika</h1>
+          <p class="lead" data-i18n="lead">Vi invitiamo a condividere con noi la bellezza, l'emozione e la gioia del nostro matrimonio.</p>
+          <p class="note" data-i18n="note">La vostra presenza renderà questo giorno ancora più prezioso e indimenticabile.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#details" data-i18n="details_btn">Scopri i dettagli</a>
+            <a class="btn btn-secondary" href="#rsvp" data-i18n="rsvp_btn">Conferma presenza</a>
+          </div>
+        </div>
 
-<div class="box">
-<p id="text1"></p>
-</div>
+        <div class="count-shell">
+          <h2 class="count-title" data-i18n="count_title">Conto alla rovescia</h2>
+          <div class="count-grid">
+            <div class="count-box"><span class="count-number" id="days">0</span><span class="count-label" data-i18n="days">Giorni</span></div>
+            <div class="count-box"><span class="count-number" id="hours">0</span><span class="count-label" data-i18n="hours">Ore</span></div>
+            <div class="count-box"><span class="count-number" id="minutes">0</span><span class="count-label" data-i18n="minutes">Minuti</span></div>
+            <div class="count-box"><span class="count-number" id="seconds">0</span><span class="count-label" data-i18n="seconds">Secondi</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-<div class="box">
-<h3 id="rsvpTitle"></h3>
+    <section>
+      <div class="card">
+        <span class="tag" data-i18n="together_tag">Un giorno da vivere insieme</span>
+        <h2 class="section-title" data-i18n="together_title">Vi aspettiamo con il cuore pieno di gioia</h2>
+        <p class="section-text" data-i18n="together_text">Condividere con voi questo momento sarà una delle parti più belle del nostro giorno speciale.</p>
+        <p class="quote" data-i18n="quote">“I giorni più belli diventano davvero indimenticabili quando sono condivisi con le persone amate.”</p>
+      </div>
+    </section>
 
-<input id="name" placeholder="">
-<select id="presence">
-<option value=""></option>
-<option value="yes"></option>
-<option value="no"></option>
-</select>
+    <section id="details">
+      <div class="card">
+        <span class="tag" data-i18n="details_tag">Dettagli del matrimonio</span>
+        <h2 class="section-title" data-i18n="details_title">Il programma della giornata</h2>
+        <p class="section-text" data-i18n="details_text">Qui trovate tutte le informazioni utili per accompagnarci in questo giorno speciale.</p>
 
-<textarea id="msg"></textarea>
+        <div class="details-grid">
+          <div class="detail">
+            <h3 data-i18n="ceremony_title">La Cerimonia</h3>
+            <p><strong data-i18n="ceremony_time">Ore 13:00</strong></p>
+            <p data-i18n="church_name">Chiesa Ortodossa Rumena San Giorgio</p>
+            <p data-i18n="church_address_1">Via Umberto Terracini, 4</p>
+            <p data-i18n="church_address_2">20090 Fizzonasco (Rozzano, MI)</p>
+          </div>
+          <div class="detail">
+            <h3 data-i18n="reception_title">Il Ricevimento</h3>
+            <p><strong data-i18n="reception_time">Ore 16:00</strong></p>
+            <p>La Boero</p>
+            <p data-i18n="venue_address_1">Via del Guado 57</p>
+            <p data-i18n="venue_address_2">Desio</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<button onclick="send()"
- id="btn"></button>
-</div>
+    <section id="rsvp">
+      <div class="card">
+        <span class="tag">RSVP</span>
+        <h2 class="section-title" data-i18n="rsvp_title">Conferma la tua presenza</h2>
+        <p class="section-text" data-i18n="rsvp_text">Ti chiediamo gentilmente di confermare entro il 27 agosto 2026.</p>
 
-<script>
+        <form id="rsvpForm">
+          <div class="rsvp-grid">
+            <div class="field">
+              <label for="name" data-i18n="label_name">Nome e cognome</label>
+              <input id="name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="presence" data-i18n="label_presence">Parteciperai?</label>
+              <select id="presence" required>
+                <option value="" data-i18n="select_default">Seleziona una risposta</option>
+                <option value="yes" data-i18n="select_yes">Parteciperò con gioia</option>
+                <option value="no" data-i18n="select_no">Purtroppo non potrò esserci</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="message" data-i18n="label_message">Messaggio</label>
+              <textarea id="message"></textarea>
+            </div>
+          </div>
 
-const t = {
-it:{
-text1:"Siamo felici di condividere con voi questo giorno speciale.",
-rsvp:"Conferma presenza",
-name:"Nome e cognome",
-yes:"Parteciperò",
-no:"Non potrò venire",
-msg:"Messaggio",
-btn:"Invia su WhatsApp"
-},
-ro:{
-text1:"Suntem fericiți să împărtășim această zi specială cu voi.",
-rsvp:"Confirmă prezența",
-name:"Nume și prenume",
-yes:"Voi participa",
-no:"Nu pot veni",
-msg:"Mesaj",
-btn:"Trimite pe WhatsApp"
-},
-ua:{
-text1:"Ми раді розділити з вами цей особливий день.",
-rsvp:"Підтвердіть присутність",
-name:"Ім’я та прізвище",
-yes:"Буду присутній",
-no:"Не зможу бути",
-msg:"Повідомлення",
-btn:"Надіслати у WhatsApp"
-}
-}
+          <div class="hero-actions" style="margin-top:20px">
+            <button type="submit" class="btn btn-primary" data-i18n="send_btn">Invia su WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </section>
 
-function setLang(l){
-document.getElementById("text1").innerText=t[l].text1;
-document.getElementById("rsvpTitle").innerText=t[l].rsvp;
-document.getElementById("name").placeholder=t[l].name;
-document.getElementById("presence").options[1].text=t[l].yes;
-document.getElementById("presence").options[2].text=t[l].no;
-document.getElementById("msg").placeholder=t[l].msg;
-document.getElementById("btn").innerText=t[l].btn;
-}
+    <div class="footer" data-i18n="footer">Maxim & Angelika · 27 Settembre 2026</div>
+  </div>
 
-setLang('it');
+  <script>
+    const translations = {
+      it: {
+        eyebrow: "27 settembre 2026",
+        script: "Con immensa gioia",
+        lead: "Vi invitiamo a condividere con noi la bellezza, l'emozione e la gioia del nostro matrimonio.",
+        note: "La vostra presenza renderà questo giorno ancora più prezioso e indimenticabile.",
+        details_btn: "Scopri i dettagli",
+        rsvp_btn: "Conferma presenza",
+        count_title: "Conto alla rovescia",
+        days: "Giorni",
+        hours: "Ore",
+        minutes: "Minuti",
+        seconds: "Secondi",
+        together_tag: "Un giorno da vivere insieme",
+        together_title: "Vi aspettiamo con il cuore pieno di gioia",
+        together_text: "Condividere con voi questo momento sarà una delle parti più belle del nostro giorno speciale.",
+        quote: "“I giorni più belli diventano davvero indimenticabili quando sono condivisi con le persone amate.”",
+        details_tag: "Dettagli del matrimonio",
+        details_title: "Il programma della giornata",
+        details_text: "Qui trovate tutte le informazioni utili per accompagnarci in questo giorno speciale.",
+        ceremony_title: "La Cerimonia",
+        ceremony_time: "Ore 13:00",
+        church_name: "Chiesa Ortodossa Rumena San Giorgio",
+        church_address_1: "Via Umberto Terracini, 4",
+        church_address_2: "20090 Fizzonasco (Rozzano, MI)",
+        reception_title: "Il Ricevimento",
+        reception_time: "Ore 16:00",
+        venue_address_1: "Via del Guado 57",
+        venue_address_2: "Desio",
+        rsvp_title: "Conferma la tua presenza",
+        rsvp_text: "Ti chiediamo gentilmente di confermare entro il 27 agosto 2026.",
+        label_name: "Nome e cognome",
+        label_presence: "Parteciperai?",
+        select_default: "Seleziona una risposta",
+        select_yes: "Parteciperò con gioia",
+        select_no: "Purtroppo non potrò esserci",
+        label_message: "Messaggio",
+        send_btn: "Invia su WhatsApp",
+        footer: "Maxim & Angelika · 27 Settembre 2026",
+        wa_intro: "Ciao! Conferma matrimonio Maxim & Angelika.",
+        wa_name: "Nome",
+        wa_presence: "Presenza",
+        wa_message: "Messaggio"
+      },
+      ro: {
+        eyebrow: "27 septembrie 2026",
+        script: "Cu mare bucurie",
+        lead: "Vă invităm să împărtășiți cu noi frumusețea, emoția și bucuria nunții noastre.",
+        note: "Prezența voastră va face această zi și mai prețioasă și de neuitat.",
+        details_btn: "Descoperă detaliile",
+        rsvp_btn: "Confirmă prezența",
+        count_title: "Numărătoare inversă",
+        days: "Zile",
+        hours: "Ore",
+        minutes: "Minute",
+        seconds: "Secunde",
+        together_tag: "O zi de trăit împreună",
+        together_title: "Vă așteptăm cu inimile pline de bucurie",
+        together_text: "Să împărtășim acest moment cu voi va fi una dintre cele mai frumoase părți ale zilei noastre speciale.",
+        quote: "„Cele mai frumoase zile devin cu adevărat de neuitat atunci când sunt împărtășite cu oamenii iubiți.”",
+        details_tag: "Detaliile nunții",
+        details_title: "Programul zilei",
+        details_text: "Aici găsiți toate informațiile utile pentru a ne însoți în această zi specială.",
+        ceremony_title: "Ceremonia",
+        ceremony_time: "Ora 13:00",
+        church_name: "Biserica Ortodoxă Română San Giorgio",
+        church_address_1: "Via Umberto Terracini, 4",
+        church_address_2: "20090 Fizzonasco (Rozzano, MI)",
+        reception_title: "Recepția",
+        reception_time: "Ora 16:00",
+        venue_address_1: "Via del Guado 57",
+        venue_address_2: "Desio",
+        rsvp_title: "Confirmă prezența",
+        rsvp_text: "Vă rugăm să confirmați până la 27 august 2026.",
+        label_name: "Nume și prenume",
+        label_presence: "Veți participa?",
+        select_default: "Selectați un răspuns",
+        select_yes: "Voi participa cu bucurie",
+        select_no: "Din păcate nu voi putea veni",
+        label_message: "Mesaj",
+        send_btn: "Trimite pe WhatsApp",
+        footer: "Maxim & Angelika · 27 Septembrie 2026",
+        wa_intro: "Bună! Confirmare pentru nunta lui Maxim & Angelika.",
+        wa_name: "Nume",
+        wa_presence: "Prezență",
+        wa_message: "Mesaj"
+      },
+      ua: {
+        eyebrow: "27 вересня 2026",
+        script: "З великою радістю",
+        lead: "Ми запрошуємо вас розділити з нами красу, хвилювання та радість нашого весілля.",
+        note: "Ваша присутність зробить цей день ще більш цінним і незабутнім.",
+        details_btn: "Переглянути деталі",
+        rsvp_btn: "Підтвердити присутність",
+        count_title: "Зворотний відлік",
+        days: "Днів",
+        hours: "Годин",
+        minutes: "Хвилин",
+        seconds: "Секунд",
+        together_tag: "День, який хочеться прожити разом",
+        together_title: "Ми чекаємо на вас із радістю в серці",
+        together_text: "Розділити цю мить із вами буде однією з найпрекрасніших частин нашого особливого дня.",
+        quote: "«Найпрекрасніші дні стають по-справжньому незабутніми, коли їх розділяють із дорогими людьми.»",
+        details_tag: "Деталі весілля",
+        details_title: "Програма дня",
+        details_text: "Тут ви знайдете всю корисну інформацію, щоб бути поруч із нами у цей особливий день.",
+        ceremony_title: "Церемонія",
+        ceremony_time: "13:00",
+        church_name: "Румунська Православна Церква San Giorgio",
+        church_address_1: "Via Umberto Terracini, 4",
+        church_address_2: "20090 Fizzonasco (Rozzano, MI)",
+        reception_title: "Святкування",
+        reception_time: "16:00",
+        venue_address_1: "Via del Guado 57",
+        venue_address_2: "Desio",
+        rsvp_title: "Підтвердіть вашу присутність",
+        rsvp_text: "Будь ласка, підтвердьте участь до 27 серпня 2026.",
+        label_name: "Ім’я та прізвище",
+        label_presence: "Чи будете присутні?",
+        select_default: "Оберіть відповідь",
+        select_yes: "Із радістю буду присутній(я)",
+        select_no: "На жаль, не зможу бути присутнім(ньою)",
+        label_message: "Повідомлення",
+        send_btn: "Надіслати у WhatsApp",
+        footer: "Maxim & Angelika · 27 Вересня 2026",
+        wa_intro: "Вітаю! Підтвердження для весілля Maxim & Angelika.",
+        wa_name: "Ім’я",
+        wa_presence: "Присутність",
+        wa_message: "Повідомлення"
+      }
+    };
 
-function send(){
-let n=document.getElementById("name").value;
-let p=document.getElementById("presence").value;
-let m=document.getElementById("msg").value;
+    let currentLang = 'it';
 
-let text=encodeURIComponent("Nome: "+n+"\nPresenza: "+p+"\nMessaggio: "+m);
-window.open("https://wa.me/393471946304?text="+text);
-}
+    function setLanguage(lang){
+      currentLang = lang;
+      document.documentElement.lang = lang === 'ua' ? 'uk' : lang;
 
-</script>
+      document.querySelectorAll('[data-lang]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
 
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang][key] !== undefined) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      const select = document.getElementById('presence');
+      select.options[0].text = translations[lang].select_default;
+      select.options[1].text = translations[lang].select_yes;
+      select.options[1].value = translations[lang].select_yes;
+      select.options[2].text = translations[lang].select_no;
+      select.options[2].value = translations[lang].select_no;
+
+      document.getElementById('name').placeholder = translations[lang].label_name;
+      document.getElementById('message').placeholder = translations[lang].label_message;
+    }
+
+    document.querySelectorAll('[data-lang]').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
+
+    function updateCountdown(){
+      const wedding = new Date('2026-09-27T13:00:00+02:00');
+      const now = new Date();
+      const diff = wedding - now;
+      const total = Math.max(0, Math.floor(diff / 1000));
+
+      const d = Math.floor(total / 86400);
+      const h = Math.floor((total % 86400) / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+
+      document.getElementById('days').textContent = String(d);
+      document.getElementById('hours').textContent = String(h).padStart(2,'0');
+      document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+      document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    setLanguage('it');
+
+    document.getElementById('rsvpForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const t = translations[currentLang];
+      const name = document.getElementById('name').value.trim();
+      const presence = document.getElementById('presence').value;
+      const message = document.getElementById('message').value.trim();
+
+      const lines = [
+        t.wa_intro,
+        "",
+        `${t.wa_name}: ${name}`,
+        `${t.wa_presence}: ${presence}`
+      ];
+      if (message) lines.push(`${t.wa_message}: ${message}`);
+
+      const text = encodeURIComponent(lines.join("\n"));
+      window.open(`https://wa.me/393471946304?text=${text}`, '_blank');
+    });
+
+    const petals = document.getElementById('petals');
+    for(let i=0;i<18;i++){
+      const p = document.createElement('span');
+      p.className = 'petal';
+      p.style.left = Math.random()*100 + 'vw';
+      p.style.setProperty('--drift', (Math.random()*120 - 60) + 'px');
+      p.style.animationDuration = (12 + Math.random()*12) + 's';
+      p.style.animationDelay = (-Math.random()*20) + 's';
+      petals.appendChild(p);
+    }
+  </script>
 </body>
 </html>
