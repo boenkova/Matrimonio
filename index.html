@@ -21,7 +21,6 @@
       --shadow:0 18px 48px rgba(49,66,50,.08);
       --radius:28px;
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
@@ -33,48 +32,16 @@
         radial-gradient(circle at bottom right, rgba(174,186,167,.16), transparent 28%),
         linear-gradient(180deg,#fbf9f4 0%,#f4f3ed 55%,#eff3ea 100%);
       overflow-x:hidden;
+      padding-bottom:80px;
     }
-
-    body::before,
-    body::after{
-      content:"";
-      position:fixed;
-      z-index:0;
-      width:240px;
-      height:240px;
-      opacity:.14;
-      pointer-events:none;
-      background-repeat:no-repeat;
-      background-size:contain;
-    }
-    body::before{
-      left:-16px;
-      top:-12px;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%236b7b66' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M96 120c-16 0-29 10-37 25 17 0 29-8 37-24Z'/%3E%3Cpath d='M96 120c0-16 9-29 22-38 1 16-7 29-22 38Z'/%3E%3Cpath d='M96 120c14 8 30 7 43-4-13-8-29-8-43 4Z'/%3E%3Cpath d='M102 127c8 22 23 42 44 58'/%3E%3Cpath d='M71 79c-10 1-18 7-23 16 10 0 18-7 23-16Z'/%3E%3Cpath d='M71 79c1-10 7-18 15-24 1 10-4 18-15 24Z'/%3E%3Cpath d='M71 79c9 5 19 4 28-3-9-5-18-5-28 3Z'/%3E%3C/g%3E%3C/svg%3E");
-    }
-    body::after{
-      right:-12px;
-      bottom:-8px;
-      transform:scaleX(-1);
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%236b7b66' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M96 120c-16 0-29 10-37 25 17 0 29-8 37-24Z'/%3E%3Cpath d='M96 120c0-16 9-29 22-38 1 16-7 29-22 38Z'/%3E%3Cpath d='M96 120c14 8 30 7 43-4-13-8-29-8-43 4Z'/%3E%3Cpath d='M102 127c8 22 23 42 44 58'/%3E%3Cpath d='M71 79c-10 1-18 7-23 16 10 0 18-7 23-16Z'/%3E%3Cpath d='M71 79c1-10 7-18 15-24 1 10-4 18-15 24Z'/%3E%3Cpath d='M71 79c9 5 19 4 28-3-9-5-18-5-28 3Z'/%3E%3C/g%3E%3C/svg%3E");
-    }
-
     .petals{
-      position:fixed;
-      inset:0;
-      overflow:hidden;
-      pointer-events:none;
-      z-index:0;
+      position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0;
     }
     .petal{
-      position:absolute;
-      top:-10vh;
-      width:14px;
-      height:22px;
+      position:absolute; top:-10vh; width:14px; height:22px;
       background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(235,227,216,.88));
       border-radius:60% 40% 65% 35% / 55% 40% 60% 45%;
-      opacity:.20;
-      animation:fall linear infinite;
+      opacity:.20; animation:fall linear infinite;
     }
     @keyframes fall{
       0%{transform:translate3d(0,-10vh,0) rotate(0deg)}
@@ -82,310 +49,145 @@
     }
 
     .lang-switch{
-      position:fixed;
-      top:16px;
-      right:16px;
-      z-index:30;
-      background:rgba(255,253,248,.88);
-      border:1px solid rgba(68,86,69,.10);
-      box-shadow:var(--shadow);
-      border-radius:999px;
-      padding:8px;
-      display:flex;
-      gap:8px;
-      backdrop-filter:blur(10px);
+      position:fixed; top:16px; right:16px; z-index:30;
+      background:rgba(255,253,248,.92); border:1px solid rgba(68,86,69,.10);
+      box-shadow:var(--shadow); border-radius:999px; padding:8px;
+      display:flex; gap:8px; backdrop-filter:blur(10px);
     }
     .lang-switch button{
-      border:none;
-      background:transparent;
-      color:var(--green);
-      padding:10px 16px;
-      border-radius:999px;
-      font:600 12px/1 'Inter',sans-serif;
-      cursor:pointer;
-      letter-spacing:.08em;
+      border:none; background:transparent; color:var(--green);
+      padding:10px 16px; border-radius:999px;
+      font:600 12px/1 'Inter',sans-serif; cursor:pointer; letter-spacing:.08em;
     }
-    .lang-switch button.active{
-      background:rgba(174,186,167,.24);
-    }
+    .lang-switch button.active{ background:rgba(174,186,167,.24); }
 
     .wrap{position:relative; z-index:1; width:min(1020px, calc(100% - 28px)); margin:0 auto;}
     .hero{
-      min-height:100svh;
-      display:flex;
-      align-items:center;
-      padding:84px 0 30px;
+      min-height:100svh; display:flex; align-items:center; padding:84px 0 30px;
     }
-    .hero-card{
-      width:100%;
+    .hero-card,.card{
       background:linear-gradient(180deg, rgba(255,253,248,.95), rgba(250,249,244,.92));
-      border:1px solid rgba(68,86,69,.10);
-      border-radius:34px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
+      border:1px solid rgba(68,86,69,.10); border-radius:34px; box-shadow:var(--shadow);
+      overflow:hidden; position:relative;
     }
-    .hero-inner{
-      padding:64px 28px 28px;
-      text-align:center;
-      position:relative;
-    }
-    .hero-inner::before,
-    .hero-inner::after{
-      content:"";
-      position:absolute;
-      width:180px;
-      height:180px;
-      opacity:.18;
-      background-repeat:no-repeat;
-      background-size:contain;
-      pointer-events:none;
-    }
-    .hero-inner::before{
-      top:12px;
-      left:10px;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23aebaa7' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M80 95c-14 0-25 9-32 22 15 0 25-7 32-21Z'/%3E%3Cpath d='M80 95c0-14 8-25 20-33 1 14-6 25-20 33Z'/%3E%3Cpath d='M80 95c13 7 26 6 38-4-12-7-25-7-38 4Z'/%3E%3Cpath d='M86 101c6 18 18 33 36 47'/%3E%3C/g%3E%3C/svg%3E");
-    }
-    .hero-inner::after{
-      right:8px;
-      bottom:18px;
-      transform:scaleX(-1);
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23aebaa7' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M80 95c-14 0-25 9-32 22 15 0 25-7 32-21Z'/%3E%3Cpath d='M80 95c0-14 8-25 20-33 1 14-6 25-20 33Z'/%3E%3Cpath d='M80 95c13 7 26 6 38-4-12-7-25-7-38 4Z'/%3E%3Cpath d='M86 101c6 18 18 33 36 47'/%3E%3C/g%3E%3C/svg%3E");
-    }
-
+    .hero-inner{ padding:64px 28px 28px; text-align:center; }
     .eyebrow{
-      display:inline-block;
-      padding:10px 16px;
-      border-radius:999px;
-      background:rgba(174,186,167,.18);
-      color:var(--sage-dark);
-      text-transform:uppercase;
-      letter-spacing:.18em;
-      font-size:.72rem;
-      margin-bottom:18px;
+      display:inline-block; padding:10px 16px; border-radius:999px;
+      background:rgba(174,186,167,.18); color:var(--sage-dark);
+      text-transform:uppercase; letter-spacing:.18em; font-size:.72rem; margin-bottom:18px;
     }
     .script{
-      margin:0 0 4px;
-      font-family:'Great Vibes',cursive;
-      font-size:clamp(2.5rem,7vw,5rem);
-      color:var(--sage-dark);
-      font-weight:400;
-      line-height:1;
+      margin:0 0 4px; font-family:'Great Vibes',cursive;
+      font-size:clamp(2.5rem,7vw,5rem); color:var(--sage-dark); line-height:1;
     }
     .title{
-      margin:0;
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(3rem,9vw,5.8rem);
-      line-height:.93;
-      color:var(--green);
-      font-weight:600;
+      margin:0; font-family:'Cormorant Garamond',serif;
+      font-size:clamp(3rem,9vw,5.8rem); line-height:.93; color:var(--green); font-weight:600;
     }
     .lead{
-      width:min(680px,100%);
-      margin:22px auto 0;
-      color:var(--muted);
+      width:min(680px,100%); margin:22px auto 0; color:var(--muted);
       font-size:clamp(1rem,2.5vw,1.15rem);
     }
     .note{
-      width:min(720px,100%);
-      margin:18px auto 0;
-      color:#5f6d5d;
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(1.18rem,3vw,1.65rem);
+      width:min(720px,100%); margin:18px auto 0; color:#5f6d5d;
+      font-family:'Cormorant Garamond',serif; font-size:clamp(1.18rem,3vw,1.65rem);
     }
     .hero-actions{
-      display:flex;
-      justify-content:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:28px;
+      display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:28px;
     }
     .btn{
-      border:none;
-      text-decoration:none;
-      border-radius:999px;
-      padding:14px 22px;
-      font:600 14px/1 'Inter',sans-serif;
-      cursor:pointer;
-      min-width:180px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border:none; text-decoration:none; border-radius:999px; padding:14px 22px;
+      font:600 14px/1 'Inter',sans-serif; cursor:pointer; min-width:180px;
     }
     .btn-primary{
-      background:linear-gradient(180deg, #6c7b67, #546251);
-      color:#fff;
+      background:linear-gradient(180deg, #6c7b67, #546251); color:#fff;
       box-shadow:0 10px 24px rgba(84,98,81,.18);
     }
     .btn-secondary{
-      background:rgba(255,255,255,.82);
-      color:var(--green);
+      background:rgba(255,255,255,.92); color:var(--green);
       border:1px solid rgba(68,86,69,.12);
     }
 
     .count-shell{
-      padding:24px 18px 28px;
-      background:linear-gradient(180deg, rgba(255,255,255,.70), rgba(241,242,234,.75));
+      padding:24px 18px 28px; background:linear-gradient(180deg, rgba(255,255,255,.70), rgba(241,242,234,.75));
       border-top:1px solid rgba(68,86,69,.08);
     }
     .count-title{
-      text-align:center;
-      margin:0 0 16px;
-      font-family:'Cormorant Garamond',serif;
-      color:var(--green);
-      font-size:1.6rem;
+      text-align:center; margin:0 0 16px; font-family:'Cormorant Garamond',serif;
+      color:var(--green); font-size:1.6rem;
     }
-    .count-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
-    }
+    .count-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
     .count-box{
-      background:rgba(255,255,255,.82);
-      border:1px solid rgba(68,86,69,.10);
-      border-radius:22px;
-      padding:18px 10px;
-      text-align:center;
+      background:rgba(255,255,255,.82); border:1px solid rgba(68,86,69,.10);
+      border-radius:22px; padding:18px 10px; text-align:center;
     }
     .count-number{
-      display:block;
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(2rem,5vw,3rem);
-      color:var(--green);
-      line-height:1;
-      font-weight:600;
+      display:block; font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,5vw,3rem); color:var(--green); line-height:1; font-weight:600;
     }
     .count-label{
-      display:block;
-      margin-top:6px;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      color:var(--muted);
-      font-size:.82rem;
+      display:block; margin-top:6px; text-transform:uppercase; letter-spacing:.12em;
+      color:var(--muted); font-size:.82rem;
     }
 
     section{padding:24px 0 0}
-    .card{
-      background:rgba(255,253,248,.94);
-      border:1px solid rgba(68,86,69,.10);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:40px 24px;
-      position:relative;
-      overflow:hidden;
-    }
-    .card::after{
-      content:"";
-      position:absolute;
-      right:-20px;
-      bottom:-18px;
-      width:150px;
-      height:150px;
-      opacity:.12;
-      background-repeat:no-repeat;
-      background-size:contain;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%236b7b66' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M80 95c-14 0-25 9-32 22 15 0 25-7 32-21Z'/%3E%3Cpath d='M80 95c0-14 8-25 20-33 1 14-6 25-20 33Z'/%3E%3Cpath d='M80 95c13 7 26 6 38-4-12-7-25-7-38 4Z'/%3E%3Cpath d='M86 101c6 18 18 33 36 47'/%3E%3C/g%3E%3C/svg%3E");
-    }
+    .card{ padding:40px 24px; }
     .tag{
-      text-align:center;
-      display:block;
-      color:#7c8979;
-      text-transform:uppercase;
-      letter-spacing:.18em;
-      font-size:.72rem;
-      margin-bottom:10px;
+      text-align:center; display:block; color:#7c8979; text-transform:uppercase;
+      letter-spacing:.18em; font-size:.72rem; margin-bottom:10px;
     }
     .section-title{
-      margin:0;
-      text-align:center;
-      font-family:'Cormorant Garamond',serif;
-      color:var(--green);
-      font-size:clamp(2rem,6vw,3.4rem);
-      line-height:1;
+      margin:0; text-align:center; font-family:'Cormorant Garamond',serif;
+      color:var(--green); font-size:clamp(2rem,6vw,3.4rem); line-height:1.05;
     }
     .section-text{
-      width:min(730px,100%);
-      margin:14px auto 0;
-      text-align:center;
-      color:var(--muted);
-      font-size:1rem;
+      width:min(730px,100%); margin:14px auto 0; text-align:center; color:var(--muted); font-size:1rem;
     }
     .quote{
-      width:min(760px,100%);
-      margin:16px auto 0;
-      text-align:center;
-      color:#5a6758;
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(1.2rem,3vw,1.8rem);
+      width:min(760px,100%); margin:16px auto 0; text-align:center; color:#5a6758;
+      font-family:'Cormorant Garamond',serif; font-size:clamp(1.2rem,3vw,1.8rem);
     }
 
     .details-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:18px;
-      margin-top:26px;
+      display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:26px;
     }
     .detail{
       background:linear-gradient(180deg, #ffffff, #f6f7f0);
-      border:1px solid rgba(68,86,69,.10);
-      border-radius:24px;
-      padding:24px 18px;
-      text-align:center;
+      border:1px solid rgba(68,86,69,.10); border-radius:24px; padding:24px 18px; text-align:center;
     }
     .detail h3{
-      margin:0 0 8px;
-      font-family:'Cormorant Garamond',serif;
-      color:var(--green);
-      font-size:2rem;
+      margin:0 0 8px; font-family:'Cormorant Garamond',serif; color:var(--green); font-size:2rem;
     }
-    .detail p{
-      margin:6px 0;
-      color:#536152;
+    .detail p{ margin:6px 0; color:#536152; }
+    .map-buttons{
+      display:flex; flex-direction:column; gap:10px; align-items:center; margin-top:16px;
     }
 
     .rsvp-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:14px;
-      margin-top:22px;
+      display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:22px;
     }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .field.full{grid-column:1 / -1}
-    label{
-      color:#5f6d5d;
-      font-size:.92rem;
-      font-weight:600;
-    }
+    .field{ display:flex; flex-direction:column; gap:8px; }
+    .field.full{ grid-column:1 / -1; }
+    label{ color:#5f6d5d; font-size:.92rem; font-weight:600; }
     input, select, textarea{
-      width:100%;
-      border:1px solid rgba(68,86,69,.16);
-      border-radius:16px;
-      padding:14px;
-      font:inherit;
-      color:var(--text);
-      background:rgba(255,255,255,.92);
-      outline:none;
+      width:100%; border:1px solid rgba(68,86,69,.16); border-radius:16px; padding:14px;
+      font:inherit; color:var(--text); background:rgba(255,255,255,.92); outline:none;
     }
-    textarea{min-height:120px; resize:vertical}
+    textarea{ min-height:120px; resize:vertical; }
 
     .footer{
-      padding:28px 0 52px;
-      text-align:center;
-      color:#788377;
-      font-size:.95rem;
+      padding:28px 0 90px; text-align:center; color:#788377; font-size:.95rem;
     }
 
     @media (max-width:760px){
-      .count-grid, .details-grid, .rsvp-grid{grid-template-columns:1fr}
+      .count-grid, .details-grid, .rsvp-grid{ grid-template-columns:1fr; }
+      .btn{ width:100%; min-width:unset; }
+      .hero-actions{ flex-direction:column; }
+      .hero-inner{ padding:88px 18px 24px; }
       .lang-switch{
-        top:auto;
-        bottom:16px;
-        right:50%;
-        transform:translateX(50%);
+        top:14px; right:14px; bottom:auto; transform:none;
       }
-      .btn{width:100%; min-width:unset}
-      .hero-actions{flex-direction:column}
-      .hero-inner{padding:88px 18px 24px}
     }
   </style>
 </head>
@@ -447,7 +249,9 @@
             <p data-i18n="church_name">Chiesa Ortodossa Rumena San Giorgio</p>
             <p data-i18n="church_address_1">Via Umberto Terracini, 4</p>
             <p data-i18n="church_address_2">20090 Fizzonasco (Rozzano, MI)</p>
-<a href="https://www.google.com/maps?q=Via+Umberto+Terracini+4+Rozzano" target="_blank" class="btn btn-secondary">📍 Naviga alla chiesa</a>
+            <div class="map-buttons">
+              <a class="btn btn-secondary" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Chiesa+Ortodossa+Rumena+San+Giorgio+Via+Umberto+Terracini+4+Fizzonasco+Rozzano+MI" data-i18n="map_church">📍 Naviga alla chiesa</a>
+            </div>
           </div>
           <div class="detail">
             <h3 data-i18n="reception_title">Il Ricevimento</h3>
@@ -455,7 +259,9 @@
             <p>La Boero</p>
             <p data-i18n="venue_address_1">Via del Guado 57</p>
             <p data-i18n="venue_address_2">Desio</p>
-<a href="https://www.google.com/maps?q=Via+del+Guado+57+Desio" target="_blank" class="btn btn-secondary">📍 Naviga alla location</a>
+            <div class="map-buttons">
+              <a class="btn btn-secondary" target="_blank" href="https://www.google.com/maps/search/?api=1&query=La+Boero+Via+del+Guado+57+Desio" data-i18n="map_location">📍 Naviga alla location</a>
+            </div>
           </div>
         </div>
       </div>
@@ -523,10 +329,12 @@
         church_name: "Chiesa Ortodossa Rumena San Giorgio",
         church_address_1: "Via Umberto Terracini, 4",
         church_address_2: "20090 Fizzonasco (Rozzano, MI)",
+        map_church: "📍 Naviga alla chiesa",
         reception_title: "Il Ricevimento",
         reception_time: "Ore 16:00",
         venue_address_1: "Via del Guado 57",
         venue_address_2: "Desio",
+        map_location: "📍 Naviga alla location",
         rsvp_title: "Conferma la tua presenza",
         rsvp_text: "Ti chiediamo gentilmente di confermare entro il 27 agosto 2026.",
         label_name: "Nome e cognome",
@@ -566,10 +374,12 @@
         church_name: "Biserica Ortodoxă Română San Giorgio",
         church_address_1: "Via Umberto Terracini, 4",
         church_address_2: "20090 Fizzonasco (Rozzano, MI)",
+        map_church: "📍 Navighează la biserică",
         reception_title: "Recepția",
         reception_time: "Ora 16:00",
         venue_address_1: "Via del Guado 57",
         venue_address_2: "Desio",
+        map_location: "📍 Navighează la locație",
         rsvp_title: "Confirmă prezența",
         rsvp_text: "Vă rugăm să confirmați până la 27 august 2026.",
         label_name: "Nume și prenume",
@@ -609,10 +419,12 @@
         church_name: "Румунська Православна Церква San Giorgio",
         church_address_1: "Via Umberto Terracini, 4",
         church_address_2: "20090 Fizzonasco (Rozzano, MI)",
+        map_church: "📍 Навігація до церкви",
         reception_title: "Святкування",
         reception_time: "16:00",
         venue_address_1: "Via del Guado 57",
         venue_address_2: "Desio",
+        map_location: "📍 Навігація до локації",
         rsvp_title: "Підтвердіть вашу присутність",
         rsvp_text: "Будь ласка, підтвердьте участь до 27 серпня 2026.",
         label_name: "Ім’я та прізвище",
@@ -642,9 +454,7 @@
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
-        if (translations[lang][key] !== undefined) {
-          el.innerHTML = translations[lang][key];
-        }
+        if (translations[lang][key] !== undefined) el.innerHTML = translations[lang][key];
       });
 
       const select = document.getElementById('presence');
@@ -653,35 +463,24 @@
       select.options[1].value = translations[lang].select_yes;
       select.options[2].text = translations[lang].select_no;
       select.options[2].value = translations[lang].select_no;
-
       document.getElementById('name').placeholder = translations[lang].label_name;
       document.getElementById('message').placeholder = translations[lang].label_message;
     }
-
-    document.querySelectorAll('[data-lang]').forEach(btn => {
-      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
-    });
 
     function updateCountdown(){
       const wedding = new Date('2026-09-27T13:00:00+02:00');
       const now = new Date();
       const diff = wedding - now;
       const total = Math.max(0, Math.floor(diff / 1000));
-
-      const d = Math.floor(total / 86400);
-      const h = Math.floor((total % 86400) / 3600);
-      const m = Math.floor((total % 3600) / 60);
-      const s = total % 60;
-
-      document.getElementById('days').textContent = String(d);
-      document.getElementById('hours').textContent = String(h).padStart(2,'0');
-      document.getElementById('minutes').textContent = String(m).padStart(2,'0');
-      document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+      document.getElementById('days').textContent = Math.floor(total / 86400);
+      document.getElementById('hours').textContent = String(Math.floor((total % 86400) / 3600)).padStart(2,'0');
+      document.getElementById('minutes').textContent = String(Math.floor((total % 3600) / 60)).padStart(2,'0');
+      document.getElementById('seconds').textContent = String(total % 60).padStart(2,'0');
     }
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-    setLanguage('it');
+    document.querySelectorAll('[data-lang]').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
 
     document.getElementById('rsvpForm').addEventListener('submit', function(e){
       e.preventDefault();
@@ -689,17 +488,9 @@
       const name = document.getElementById('name').value.trim();
       const presence = document.getElementById('presence').value;
       const message = document.getElementById('message').value.trim();
-
-      const lines = [
-        t.wa_intro,
-        "",
-        `${t.wa_name}: ${name}`,
-        `${t.wa_presence}: ${presence}`
-      ];
+      const lines = [t.wa_intro, "", `${t.wa_name}: ${name}`, `${t.wa_presence}: ${presence}`];
       if (message) lines.push(`${t.wa_message}: ${message}`);
-
-      const text = encodeURIComponent(lines.join("\n"));
-      window.open(`https://wa.me/393471946304?text=${text}`, '_blank');
+      window.open(`https://wa.me/393471946304?text=${encodeURIComponent(lines.join("\n"))}`, '_blank');
     });
 
     const petals = document.getElementById('petals');
@@ -712,6 +503,10 @@
       p.style.animationDelay = (-Math.random()*20) + 's';
       petals.appendChild(p);
     }
+
+    setLanguage('it');
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
